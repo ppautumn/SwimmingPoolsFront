@@ -1,0 +1,37 @@
+/* semantic color variables for this project */
+:root {
+  --section-gap: 160px;
+
+  --color-brand-magenta: #E5097D;
+  --color-background-stripe: #f1f1f1;
+  --color-header-text: #1b1b1b;
+  --color-footer-background: #1b1b1b;
+  --color-shy-text: rgba(0, 0, 0, 0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  font-weight: normal;
+}
+
+body {
+  /*min-height: 100vh;*/
+  /*color: var(--color-text);*/
+  /*background: var(--color-background);*/
+  /*transition: color 0.5s, background-color 0.5s;*/
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

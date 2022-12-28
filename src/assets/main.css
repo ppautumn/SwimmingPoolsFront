@@ -1,0 +1,71 @@
+@import './base.css';
+
+a.active {
+  border-bottom: 2px solid var(--color-brand-magenta);
+  padding-bottom: 6px;
+}
+
+.beautiful-text {
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-image: linear-gradient(105.19deg, #DD0A7B 22.53%, #E31C2C 36.76%, #EE6A1B 61.97%, #FAC607 81.15%);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 29px;
+}
+
+h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 64px;
+  line-height: 78px;
+  color: var(--color-header-text);
+}
+
+h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 26px;
+  line-height: 29px;
+  color: var(--color-header-text);
+}
+
+h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 29px;
+  color: var(--color-header-text);
+}
+
+h5 {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--color-header-text);
+}
+
+h6 {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--color-shy-text);
+}
+
+.urfu-button {
+  background-color: var(--color-brand-magenta);
+  border: 0 solid;
+}
+
+.urfu-button:hover {
+
+}
