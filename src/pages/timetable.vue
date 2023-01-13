@@ -3,25 +3,16 @@
     <h1>Расписание</h1>
     <h4>Свободное плавание</h4>
     <h5>Время сеанса: 45 минут</h5>
-    <header>
-      <div class="start-cell"></div>
-      <div>пн</div>
-      <div>вт</div>
-      <div>ср</div>
-      <div>чт</div>
-      <div>пт</div>
-      <div>сб</div>
-      <div>вс</div>
-    </header>
-    <main v-for="slotStart of slotStarts">
-      <div class="start-cell">{{ slotStart }}</div>
-      <div>пн</div>
-      <div>вт</div>
-      <div>ср</div>
-      <div>чт</div>
-      <div>пт</div>
-      <div>сб</div>
-      <div>вс</div>
+    <main class="mb-3">
+      <div>
+        <div class="start-cell">&nbsp;</div>
+        <div v-for="timeChoice of timeChoices" class="start-cell">{{timeChoice[0]}}</div>
+      </div>
+      <div v-for="ttslot of Object.entries(allSlots.available_tracks ?? {})"
+           class="day-column">
+        <div>{{ttslot[0]}}</div>
+        <div v-for="available of ttslot[1]">{{available}}</div>
+      </div>
     </main>
     <b-button squared class="mb-2 urfu-button" to="/book">Записаться</b-button>
     <h4>Обучение плаванию (дети 4-6 лет)</h4>
@@ -35,7 +26,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
 import {formatDate} from '@/date-utils'
 
 export default {
@@ -55,6 +45,7 @@ export default {
         params: {
           start: formatDate(today),
           end: formatDate(afterWeek),
+          table_type: 'freeswim',
         },
       })
     },
@@ -70,17 +61,7 @@ export default {
     console.log(this.allSlots)
   },
   computed: {
-    slotStarts() {
-      return this.timeChoices?.map(v => v[0])
-    },
-    slotData() {
-      const allSlotsByTime = _.groupBy(this.allSlots, v => v['time_slot'])
-      return {
-        freeSwim: this.timeChoices?.map(time => allSlotsByTime[time]),
-        children46: [],
-        children713: [],
-      }
-    },
+
   },
 }
 
@@ -88,13 +69,22 @@ export default {
 
 <style scoped>
 
-header, main {
+aside, main {
   display: flex;
   justify-content: space-around;
   border: 2px solid #2c3e50;
 }
 
+div.day-column {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  border-left: 1px solid #2c3e50;
+  border-right: 1px solid #2c3e50;
+}
+
 .start-cell {
-  width: 20px;
+  border-right: 1px solid #2c3e50;
 }
 </style>

@@ -2,16 +2,16 @@
   <b-container class="wrapper p-5" fluid>
     <h4 class="text-center mb-5">Полезная информация</h4>
     <b-card-group deck>
-      <b-card class="card" img-src="../src/assets/images/Дорожки.png" img-top>
+      <b-card class="card" img-src="../src/assets/images/Дорожки.png" img-alt="Дорожки" img-top>
         <b-card-text>Что нужно знать перед посещением?</b-card-text>
       </b-card>
-      <b-card class="card" img-src="../src/assets/images/Девушка.png" img-top>
+      <b-card class="card" img-src="../src/assets/images/Девушка.png" img-alt="Девушка" img-top>
         <b-card-text>Цены и график работы</b-card-text>
       </b-card>
-      <b-card class="card" img-src="../src/assets/images/Здание.png" img-top>
+      <b-card class="card" img-src="../src/assets/images/Здание.png" img-alt="Здание" img-top>
         <b-card-text>Как до нас добраться</b-card-text>
       </b-card>
-      <b-card class="card" img-src="../src/assets/images/ребенок.png" img-top>
+      <b-card class="card" img-src="../src/assets/images/ребенок.png" img-alt="ребенок" img-top>
         <b-card-text>Правила посещения</b-card-text>
       </b-card>
     </b-card-group>
