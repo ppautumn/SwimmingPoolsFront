@@ -48,17 +48,23 @@ export default {
 
 <style scoped>
 .track-selector {
+  --selector-height: 5em;
+}
+
+.track-selector {
   background: var(--color-background-stripe);
+  transition: box-shadow 0.2s ease-in-out;
   flex-grow: 1;
   text-align: center;
-  height: 5em;
+  height: var(--selector-height);
   font-size: 30pt;
-  line-height: 5em;
+  line-height: var(--selector-height);
   border-radius: 0.25rem;
 }
 
 .track-selector.active {
-  background: var(--color-footer-background);
   color: white;
+  box-shadow: inset 0 var(--selector-height) 0 0 var(--color-footer-background);
+  transition: box-shadow 0.2s ease-in-out;
 }
 </style>

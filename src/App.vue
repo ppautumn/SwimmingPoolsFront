@@ -8,8 +8,8 @@ import FooterComponent from '@/components/footer-component.vue'
 <template>
   <navbar :user="user"/>
   <b-container class="p-5" fluid>
-    <router-view v-slot="{Component}">
-      <transition name="fade">
+    <router-view v-slot="{Component, route}">
+      <transition name="slide" mode="out-in">
         <component :is="Component" :user="user" @login-success="setUser" @login-failure="handleLoginError"/>
       </transition>
     </router-view>
@@ -58,6 +58,36 @@ export default {
   font-family: "Montserrat";
   src: local("Montserrat"),
   url(./fonts/Montserrat-VariableFont_wght.ttf) format("truetype");
+}
+
+/*
+Here you provide CSS transition declaration css-property, timing, transition effect. enter direction is from hidden -> visible and leave is the reverse direction from visible -> hidden
+*/
+
+.slide-leave-active {
+  transition: all .2s linear;
+}
+
+.slide-enter-active {
+  transition: all .2s ease-out;
+}
+
+.slide-leave-from {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.slide-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.slide-enter-from {
+  transform: translateY(15px);
+}
+
+.slide-enter-to {
+  transform: translateY(0);
 }
 
 </style>

@@ -1,5 +1,6 @@
 <script setup>
-import _ from 'lodash'</script>
+import _ from 'lodash'
+</script>
 
 <template>
   <div>
