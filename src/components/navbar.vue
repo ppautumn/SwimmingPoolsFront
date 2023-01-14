@@ -1,6 +1,3 @@
-<script setup>
-import IconUrfu from '@/components/icons/IconUrfu.vue'
-</script>
 <template>
   <b-navbar toggleable="lg" sticky="top" class="navbar px-lg-5">
     <b-navbar-brand href="#">
@@ -23,11 +20,11 @@ import IconUrfu from '@/components/icons/IconUrfu.vue'
 
       <!-- Right aligned nav items -->
       <b-navbar-nav v-if="user.id" class="ml-auto">
-        <b-button squared class="urfu-button" to="/profile">Профиль</b-button>
+        <urfu-button to="/profile">Профиль</urfu-button>
       </b-navbar-nav>
       <b-navbar-nav v-else class="ml-auto">
         <b-button variant="link" to="/register">Регистрация</b-button>
-        <b-button squared class="urfu-button" to="/login">Вход</b-button>
+        <urfu-button to="/login">Вход</urfu-button>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -35,8 +32,11 @@ import IconUrfu from '@/components/icons/IconUrfu.vue'
 
 <script>
 
+import UrfuButton from '@/components/urfu-button.vue'
+
 export default {
   name: 'navbar',
+  components: {UrfuButton},
   props: {
     user: Object,
   },

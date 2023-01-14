@@ -77,14 +77,13 @@ import _ from 'lodash'
         </b-row>
       </b-tab>
       <b-tab title="Оплата билетов" class="py-5">
-        <b-button squared class="mb-2 urfu-button" @click="pay">Оплатить</b-button>
+        <urfu-button @click="pay">Оплатить</urfu-button>
       </b-tab>
     </b-tabs>
     <div class="d-sm-flex justify-content-evenly">
-      <b-button v-if="activeTab > 0" squared class="mb-2 urfu-button" @click="activeTab--">Назад</b-button>
-      <b-button v-if="activeTab < maxTab - 1" squared class="mb-2 urfu-button" @click="activeTab++">Далее</b-button>
-      <b-button v-if="activeTab === maxTab - 1" squared class="mb-2 urfu-button" @click="submit">Потвердить и оплатить
-      </b-button>
+      <urfu-button v-if="activeTab > 0" @click="activeTab--">Назад</urfu-button>
+      <urfu-button v-if="activeTab < maxTab - 1" @click="activeTab++">Далее</urfu-button>
+      <urfu-button v-if="activeTab === maxTab - 1" @click="submit">Потвердить и оплатить</urfu-button>
     </div>
     <br>
     <h3>Информация</h3>
@@ -98,7 +97,7 @@ import _ from 'lodash'
 
 <script>
 
-import FormInputHorizontal from '@/pages/form-input-horizontal.vue'
+import FormInputHorizontal from '@/components/form-input-horizontal.vue'
 import TrackSelector from '@/components/track-selector.vue'
 import {formatDate} from '@/date-utils'
 

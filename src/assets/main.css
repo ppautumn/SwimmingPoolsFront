@@ -3,16 +3,30 @@
 a.active {
   border: 0 solid;
   border-image-slice: 1;
-  border-image-source: linear-gradient(105.19deg, #DD0A7B 22.53%, #E31C2C 36.76%, #EE6A1B 61.97%, #FAC607 81.15%);
+  border-image-source: var(--gradient-brand);
   border-bottom-width: 2px;
   padding-bottom: 6px;
+}
+
+.urfu-button {
+  background: linear-gradient(var(--color-brand-magenta), var(--color-brand-magenta));
+  border: 0 solid;
+}
+
+.urfu-button:hover, .urfu-button:focus {
+  background: var(--gradient-brand);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.urfu-button:active {
+  transform: scale(.95);
 }
 
 .beautiful-text {
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  background-image: linear-gradient(105.19deg, #DD0A7B 22.53%, #E31C2C 36.76%, #EE6A1B 61.97%, #FAC607 81.15%);
+  background-image: var(--gradient-brand);
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 24px;
@@ -62,13 +76,4 @@ h6 {
   font-size: 16px;
   line-height: 20px;
   color: var(--color-shy-text);
-}
-
-.urfu-button {
-  background-color: var(--color-brand-magenta);
-  border: 0 solid;
-}
-
-.urfu-button:hover {
-
 }

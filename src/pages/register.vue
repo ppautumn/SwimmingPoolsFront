@@ -13,7 +13,7 @@
           <router-link to="/contact-us">правилами</router-link>
           и согласен на обработку персональных данных
         </b-form-checkbox>
-        <b-button squared v-on:click="register" class="mb-2 urfu-button">Зарегистрироваться</b-button>
+        <urfu-button @click="register">Зарегистрироваться</urfu-button>
       </b-form>
     </b-col>
   </b-row>
@@ -21,8 +21,11 @@
 
 <script>
 
+import UrfuButton from '@/components/urfu-button.vue'
+
 export default {
   name: "register",
+  components: {UrfuButton},
   props: {
     user: Object,
   },

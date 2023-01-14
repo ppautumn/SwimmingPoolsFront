@@ -4,7 +4,7 @@
       <b-form>
         <b-form-input v-model="loginData.email" placeholder="электропочта" type="email" class="mb-2"></b-form-input>
         <b-form-input v-model="loginData.password" placeholder="пароль" type="password" class="mb-2"></b-form-input>
-        <b-button squared v-on:click="login" class="mb-2 urfu-button">Войти</b-button>
+        <urfu-button @click="login">Войти</urfu-button>
       </b-form>
     </b-col>
   </b-row>
@@ -12,8 +12,11 @@
 
 <script>
 
+import UrfuButton from '@/components/urfu-button.vue'
+
 export default {
   name: "login",
+  components: {UrfuButton},
   props: {
     user: Object,
   },
