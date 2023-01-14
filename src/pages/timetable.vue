@@ -5,13 +5,16 @@
     <h5>Время сеанса: 45 минут</h5>
     <main class="mb-3">
       <div>
-        <div class="start-cell">&nbsp;</div>
-        <div v-for="timeChoice of timeChoices" class="start-cell">{{timeChoice[0]}}</div>
+        <div class="cell cell-header">&nbsp;</div>
+        <div v-for="[timeChoice, index] of tableFreeTimeModel"
+             :class="`cell ${getCellBackgroundClassByIndex(index)}`">
+          {{timeChoice}}
+        </div>
       </div>
-      <div v-for="ttslot of Object.entries(allSlots.available_tracks ?? {})"
+      <div v-for="{date, slots} of tableFreeSlotsModel"
            class="day-column">
-        <div>{{ttslot[0]}}</div>
-        <div v-for="available of ttslot[1]">{{available}}</div>
+        <div class="cell cell-header">{{date}}</div>
+        <div v-for="[available, index] of slots" :class="`cell ${getCellBackgroundClassByIndex(index)}`">{{available}}</div>
       </div>
     </main>
     <b-button squared class="mb-2 urfu-button" to="/book">Записаться</b-button>
@@ -27,13 +30,17 @@
 
 <script>
 import {formatDate} from '@/date-utils'
+import _ from 'lodash'
 
 export default {
   name: "timetable",
   data() {
     return {
       timeChoices: [],
-      allSlots: [],
+      /**
+       * @type {{available_tracks: []}}
+       */
+      allSlots: {},
     }
   },
   methods: {
@@ -52,6 +59,9 @@ export default {
     async getTimeChoices() {
       return await this.axios.get('timetable/time-choices/')
     },
+    getCellBackgroundClassByIndex(index) {
+      return index % 2 === 0 ? 'alt-back' : ''
+    }
   },
   async mounted() {
     const getTimeChoicesResponse = await this.getTimeChoices()
@@ -61,7 +71,17 @@ export default {
     console.log(this.allSlots)
   },
   computed: {
-
+    tableFreeTimeModel() {
+      return _.zip(this.timeChoices.map(x => x[0]), _.range(0, this.timeChoices.length))
+    },
+    tableFreeSlotsModel() {
+      const dateToSlots = Object.entries(this.allSlots.available_tracks ?? {})
+      return dateToSlots.map(entry => {
+        const slots = Object.values(entry[1])
+        const slotsWithIndexes = _.zip(slots, _.range(0, slots.length))
+        return {date: entry[0], slots: slotsWithIndexes}
+      })
+    }
   },
 }
 
@@ -72,19 +92,33 @@ export default {
 aside, main {
   display: flex;
   justify-content: space-around;
-  border: 2px solid #2c3e50;
+  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
+  border-radius: .5em;
+  overflow-y: hidden;
+  overflow-x: scroll;
 }
 
 div.day-column {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  align-items: center;
-  border-left: 1px solid #2c3e50;
-  border-right: 1px solid #2c3e50;
+  align-content: center;
 }
 
-.start-cell {
-  border-right: 1px solid #2c3e50;
+.cell {
+  height: 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
+
+.cell.alt-back {
+  background: var(--color-background-stripe);
+}
+
+.cell.cell-header {
+  height: 3em;
+}
+
 </style>

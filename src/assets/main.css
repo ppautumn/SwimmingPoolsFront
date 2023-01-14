@@ -1,7 +1,10 @@
 @import './base.css';
 
 a.active {
-  border-bottom: 2px solid var(--color-brand-magenta);
+  border: 0 solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(105.19deg, #DD0A7B 22.53%, #E31C2C 36.76%, #EE6A1B 61.97%, #FAC607 81.15%);
+  border-bottom-width: 2px;
   padding-bottom: 6px;
 }
 
