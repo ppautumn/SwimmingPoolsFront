@@ -104,6 +104,13 @@ import {formatDate} from '@/date-utils'
 export default {
   name: "book",
   components: {FormInputHorizontal, TrackSelector},
+
+  props: {
+    date: String,
+    time: String,
+    visitType: String
+  },
+
   data() {
     return {
       maxTab: 3,
@@ -128,6 +135,7 @@ export default {
       },
     }
   },
+
   computed: {
     bookSlotDto() {
       return {
@@ -138,6 +146,7 @@ export default {
       }
     },
   },
+
   methods: {
     async submit() {
       this.activeTab++
@@ -161,12 +170,19 @@ export default {
       return value
     },
   },
+
   created() {
     this.$watch('tabData.0.visitors', newValue => {
       this.tabData['2'].infoByVisitors.length = newValue
       this.tabData['2'].infoByVisitors.fill({visitorName: '', ticketType: ''})
     }, {immediate: true})
   },
+
+  mounted() {
+    this.tabData['0'].visitDate = this.date
+    this.tabData['0'].visitTime = this.time
+    this.tabData['0'].visitType = this.visitType
+  },
+
 }
 </script>
-

@@ -3,31 +3,16 @@
     <h1>Расписание</h1>
     <h4>Свободное плавание</h4>
     <h5>Время сеанса: 45 минут</h5>
-    <article>
-      <header>
-        <div class="cell-row">
-          <div v-for="cell of tableFreeModel.tableHeader" class="cell header">
-            <div v-if="!cell"/>
-            <div v-else>{{ cell }}</div>
-          </div>
-        </div>
-      </header>
-      <main class="mb-3">
-        <div v-for="row of tableFreeModel.tableRows" class="cell-row">
-          <div :class="`cell ${getCellBackgroundClassByIndex(row.rowNum)}`">
-            {{ row.time }}
-          </div>
-          <div v-for="cell of row.availables" :class="`cell ${getCellBackgroundClassByIndex(row.rowNum)}`">
-            {{ cell }}
-          </div>
-        </div>
-      </main>
-    </article>
+    <flexible-table :table-free-model="tableFreeModel" visit-type="freeswim" @content-cell-click="contentCellClick"/>
     <urfu-button to="/book">Записаться</urfu-button>
     <h4>Обучение плаванию (дети 4-6 лет)</h4>
     <h5>Время сеанса: 45 минут</h5>
+    <flexible-table :table-free-model="tableFreeModel" visit-type="training"/>
+    <urfu-button to="/book">Записаться</urfu-button>
     <h4>Обучение плаванию (дети 7-13 лет)</h4>
     <h5>Время сеанса: 45 минут</h5>
+    <flexible-table :table-free-model="tableFreeModel" visit-type="training"/>
+    <urfu-button to="/book">Записаться</urfu-button>
     <h6>Посетителям бассейна при себе необходимо иметь справку от врача (терапевт/ педиатр) и плавательную
       шапочку.</h6>
   </div>
@@ -36,20 +21,23 @@
 
 <script>
 import {formatDate} from '@/date-utils'
-import _ from 'lodash'
+import UrfuButton from '@/components/urfu-button.vue'
+import FlexibleTable from '@/pages/flexible-table.vue'
 
 export default {
   name: "timetable",
+  components: {FlexibleTable, UrfuButton},
 
   data() {
     return {
+      /**
+       * @type {[string, string][]}
+       */
       timeChoices: [],
       /**
        * @type {{
-       *   available_tracks: {
-       *     [key: string]: {
-       *       [key: string]: number
-       *     }
+       *   [date: string]: {
+       *     [time: string]: number
        *   }
        * }}
        */
@@ -73,21 +61,21 @@ export default {
     async getTimeChoices() {
       return this.axios.get('timetable/time-choices/')
     },
-    getCellBackgroundClassByIndex(index) {
-      return index % 2 === 0 ? 'alt-back' : ''
-    },
+    contentCellClick(date, time, visitType) {
+      this.$router.push(`/book?date=${date}&time=${time}&visitType=${visitType}`)
+    }
   },
 
   async mounted() {
     const getTimeChoicesResponse = await this.getTimeChoices()
-    this.timeChoices = getTimeChoicesResponse.data.timeChoices
+    this.timeChoices = getTimeChoicesResponse.data['timeChoices']
     const getWeeklyScheduleResponse = await this.getWeeklySchedule()
-    this.allSlots = getWeeklyScheduleResponse.data
+    this.allSlots = getWeeklyScheduleResponse.data['available_tracks']
   },
 
   computed: {
     tableFreeModel() {
-      const availableTracks = Object.entries(this.allSlots.available_tracks ?? {})
+      const availableTracks = Object.entries(this.allSlots ?? {})
       const datesSlotsSplitTable = availableTracks.map(entry => ({date: entry[0], slots: entry[1]}))
 
       const tableHeader = ['', ...datesSlotsSplitTable.map(v => v.date)]
@@ -96,7 +84,10 @@ export default {
         return {
           time,
           rowNum,
-          availables: datesSlotsSplitTable.map((slotsAtDate) => slotsAtDate.slots[time]),
+          availables: datesSlotsSplitTable.map((slotsAtDate) => ({
+            slots: slotsAtDate.slots[time],
+            date: slotsAtDate.date,
+          })),
         }
       })
 
@@ -109,43 +100,5 @@ export default {
 </script>
 
 <style scoped>
-
-article {
-  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
-  border-radius: .5em;
-  /*overflow-x: scroll;*/
-  overflow-y: clip;
-}
-
-header, main {
-  display: flex;
-  flex-direction: column;
-}
-
-header {
-  background: linear-gradient(105.19deg, rgba(221, 10, 123, 0.1) 22.53%, rgba(227, 28, 44, 0.1) 36.76%, rgba(238, 106, 27, 0.1) 61.97%, rgba(250, 198, 7, 0.1) 81.15%);
-}
-
-.cell-row {
-  display: flex;
-  justify-content: space-around;
-}
-
-.cell {
-  height: 2em;
-  width: 6em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-}
-
-.cell.alt-back {
-  background: var(--color-background-stripe);
-}
-
-.cell.header {
-  height: 3em;
-}
 
 </style>

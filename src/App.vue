@@ -7,7 +7,7 @@ import FooterComponent from '@/components/footer-component.vue'
 
 <template>
   <navbar :user="user"/>
-  <b-container class="p-5" fluid>
+  <b-container class="p-2 p-md-5" fluid>
     <router-view v-slot="{Component, route}">
       <transition name="slide" mode="out-in">
         <component :is="Component" :user="user" @login-success="setUser" @login-failure="handleLoginError"/>

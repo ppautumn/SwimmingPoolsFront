@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-content-evenly">
-    <div v-for="track of availableTracks" class="track-selector mx-3"
+    <div v-for="track of availableTracks" class="track-selector mx-1 mx-md-3"
          :class="{active: modelValue === track.id}" @click="trackClick(track.id)" :key="track.id">{{ track.number }}
     </div>
   </div>
@@ -47,19 +47,25 @@ export default {
 </script>
 
 <style scoped>
-.track-selector {
-  --selector-height: 5em;
-}
 
 .track-selector {
+  --selector-height: 4em;
   background: var(--color-background-stripe);
   transition: box-shadow 0.2s ease-in-out;
   flex-grow: 1;
+  flex-basis: 0.5em;
   text-align: center;
   height: var(--selector-height);
-  font-size: 30pt;
+  font-size: 25pt;
   line-height: var(--selector-height);
   border-radius: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .track-selector {
+    --selector-height: 5em;
+    font-size: 30pt;
+  }
 }
 
 .track-selector.active {
@@ -67,4 +73,9 @@ export default {
   box-shadow: inset 0 var(--selector-height) 0 0 var(--color-footer-background);
   transition: box-shadow 0.2s ease-in-out;
 }
+
+.track-selector:active {
+  transform: scale(.95);
+}
+
 </style>
