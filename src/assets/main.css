@@ -11,6 +11,7 @@ a.active {
 .urfu-button {
   background: linear-gradient(var(--color-brand-magenta), var(--color-brand-magenta));
   border: 0 solid;
+  transition: all .2s ease-out;
 }
 
 .urfu-button:hover, .urfu-button:focus {

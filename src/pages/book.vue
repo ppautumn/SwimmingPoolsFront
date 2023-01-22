@@ -87,11 +87,11 @@ import _ from 'lodash'
     </div>
     <br>
     <h3>Информация</h3>
-    <p>Правила оказания услуг</p>
-    <p>Правила посещения бассейна</p>
-    <p>Возврат билетов осуществляется за 48 часов до начала сеанса</p>
-    <p>Нажимая кнопку «Далее», вы подтверждаете свою дееспособность, согласие на получение информации
-      об оформлении, получении заказа, согласие на обработку персональных данных.</p>
+    <a href="/favicon.png" style="display: block">Правила оказания услуг</a>
+    <a href="/favicon.png" style="display: block">Правила посещения бассейна</a>
+    <h6>Возврат билетов осуществляется за 48 часов до начала сеанса</h6>
+    <h6>Нажимая кнопку «Далее», вы подтверждаете свою дееспособность, согласие на получение информации
+      об оформлении, получении заказа, согласие на обработку персональных данных.</h6>
   </div>
 </template>
 
@@ -173,8 +173,9 @@ export default {
 
   created() {
     this.$watch('tabData.0.visitors', newValue => {
-      this.tabData['2'].infoByVisitors.length = newValue
-      this.tabData['2'].infoByVisitors.fill({visitorName: '', ticketType: ''})
+      for (let i = 0; i < newValue; i++) {
+        this.tabData['2'].infoByVisitors[i] = {visitorName: '', ticketType: ''}
+      }
     }, {immediate: true})
   },
 

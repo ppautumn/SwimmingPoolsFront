@@ -4,7 +4,7 @@
       <div :class="{'cell-row': true, 'header': true}">
         <div v-for="cell of tableFreeModel.tableHeader" class="cell header">
           <div v-if="!cell"/>
-          <div v-else>{{ cell }}</div>
+          <div v-else>{{ humanReadableDate(cell) }}</div>
         </div>
       </div>
     </header>
@@ -25,6 +25,8 @@
 
 <script>
 
+import {humanReadableDate} from '@/date-utils'
+
 export default {
   name: 'flexible-table',
   props: {
@@ -43,6 +45,9 @@ export default {
   },
   emits: ['content-cell-click'],
   methods: {
+    humanReadableDate(date) {
+      return humanReadableDate(new Date(date))
+    },
     getAltBackgroundByIndex(index) {
       return index % 2 !== 0
     },
