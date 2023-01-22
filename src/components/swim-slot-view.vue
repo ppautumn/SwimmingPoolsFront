@@ -3,7 +3,7 @@
     <h5>{{ humanReadableDate() }} {{ timeSlot }}</h5>
     <b-card :class="{'card': true, 'upcoming': upcoming}">
       <h5 class="">Свободное плавание</h5>
-      <div class="d-flex justify-content-between">
+      <div class="d-flex justify-content-between align-items-baseline">
         <p>Иванов Ванька Встанька</p>
         <div class="d-flex info-right">
           <p>{{ track }} дорожка</p>
@@ -62,22 +62,14 @@ export default {
 }
 </script>
 <style scoped>
-.card {
-  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
-  transition: all .1s ease-out;
-}
 
 .card.upcoming {
   background: var(--gradient-brand-transparent);
-}
-
-.card:hover {
-  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
-  transform: scale(1.01);
 }
 
 .info-right {
   gap: 0.5em;
   margin-right: 0.5em;
 }
+
 </style>

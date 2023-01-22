@@ -1,9 +1,33 @@
 <template>
   <div>
     <h1>Профиль</h1>
-    <b-form class="my-5">
-      <p>user id: {{user.id}}</p>
-    </b-form>
+    <b-card class="card my-5">
+      <div class="d-flex justify-content-between align-items-baseline g-3">
+        <h3 class="mb-4">Персональные данные</h3>
+        <urfu-button>Редактировать</urfu-button>
+      </div>
+      <div class="d-flex justify-content-between align-items-baseline g-3">
+        <p>user id</p><h6>{{ user.id }}</h6>
+      </div>
+      <div class="d-flex justify-content-between align-items-baseline g-3">
+        <p>Фамилия</p><h6>{{ user.id }}</h6>
+      </div>
+      <div class="d-flex justify-content-between align-items-baseline g-3">
+        <p>Имя</p><h6>{{ user.id }}</h6>
+      </div>
+      <div class="d-flex justify-content-between align-items-baseline g-3">
+        <p>Отчество</p><h6>{{ user.id }}</h6>
+      </div>
+      <div class="d-flex justify-content-between align-items-baseline g-3">
+        <p>Дата рождения</p><h6>{{ user.id }}</h6>
+      </div>
+      <div class="d-flex justify-content-between align-items-baseline g-3">
+        <p>Телефон</p><h6>{{ user.id }}</h6>
+      </div>
+      <div class="d-flex justify-content-between align-items-baseline g-3">
+        <p>Эл. почта</p><h6>{{ user.id }}</h6>
+      </div>
+    </b-card>
     <div class="py-4">
       <h3>Ближайшие сеансы</h3>
       <swim-slot-view v-for="swimSlot of upcomingSwims" :key="swimSlot.id" :id="swimSlot.id"
@@ -33,10 +57,11 @@
 import {BForm} from 'bootstrap-vue-3'
 import SwimSlotView from '@/components/swim-slot-view.vue'
 import {getDateOnly} from '@/date-utils'
+import UrfuButton from '@/components/urfu-button.vue'
 
 export default {
   name: "profile",
-  components: {SwimSlotView, BForm},
+  components: {UrfuButton, SwimSlotView, BForm},
   props: {
     user: Object,
   },
@@ -66,7 +91,7 @@ export default {
     },
     async cancelClick() {
       await this.assignMyTimetable()
-    }
+    },
   },
   computed: {
     upcomingSwims() {
@@ -89,4 +114,3 @@ export default {
   },
 }
 </script>
-
