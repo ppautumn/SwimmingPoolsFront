@@ -12,7 +12,6 @@
     <b-collapse id="nav-collapse" is-nav="true">
       <b-navbar-nav>
         <b-nav-item exact-active-class="active" to="/">Расписание</b-nav-item>
-        <b-nav-item exact-active-class="active" to="/book">Записаться</b-nav-item>
         <b-nav-item exact-active-class="active" to="/trainings">Тренировки</b-nav-item>
         <b-nav-item exact-active-class="active" to="/prices">Цены</b-nav-item>
         <b-nav-item exact-active-class="active" to="/contact-us">Контакты</b-nav-item>

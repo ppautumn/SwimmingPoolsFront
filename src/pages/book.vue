@@ -1,5 +1,6 @@
 <script setup>
 import _ from 'lodash'
+import VisitorInfo from '@/components/visitor-info.vue'
 </script>
 
 <template>
@@ -33,15 +34,10 @@ import _ from 'lodash'
         <h4>Выбор дорожки</h4>
         <b-row no-gutters class="mb-3">
           <b-col col md="8">
-            <form-input-horizontal label="Тип посещения">
-              <b>{{ tabData['0'].visitTypeOptions.find(x => x.value === tabData['0'].visitType).text }}</b>
-            </form-input-horizontal>
-            <form-input-horizontal label="Дата и время сеанса">
-              <b>{{ tabData['0'].visitDate }} {{ tabData['0'].visitTime }}</b>
-            </form-input-horizontal>
-            <form-input-horizontal label="Кол-во посетителей">
-              <b>{{ tabData['0'].visitors }}</b>
-            </form-input-horizontal>
+            <visitor-info :type="tabData['0'].visitTypeOptions.find(x => x.value === tabData['0'].visitType).text"
+                          :date="tabData['0'].visitDate"
+                          :time="tabData['0'].visitTime"
+                          :visitor-number="tabData['0'].visitors"/>
           </b-col>
         </b-row>
         <h5>Выберите номер дорожки</h5>
@@ -52,15 +48,11 @@ import _ from 'lodash'
         <h4>Информация по посетителям</h4>
         <b-row no-gutters>
           <b-col col md="8">
-            <form-input-horizontal label="Тип посещения">
-              <b>{{ tabData['0'].visitTypeOptions.find(x => x.value === tabData['0'].visitType).text }}</b>
-            </form-input-horizontal>
-            <form-input-horizontal label="Дата и время сеанса">
-              <b>{{ tabData['0'].visitDate }} {{ tabData['0'].visitTime }}</b>
-            </form-input-horizontal>
-            <form-input-horizontal label="Кол-во посетителей">
-              <b>{{ tabData['0'].visitors }}</b>
-            </form-input-horizontal>
+            <visitor-info :type="tabData['0'].visitTypeOptions.find(x => x.value === tabData['0'].visitType).text"
+                          :date="tabData['0'].visitDate"
+                          :time="tabData['0'].visitTime"
+                          :visitor-number="tabData['0'].visitors"
+                          :track-number="tabData['1'].trackNumber"/>
           </b-col>
         </b-row>
         <b-row no-gutters v-for="i of _.range(tabData['0'].visitors)">
@@ -77,7 +69,27 @@ import _ from 'lodash'
         </b-row>
       </b-tab>
       <b-tab title="Оплата билетов" class="py-5">
-        <urfu-button @click="pay">Оплатить</urfu-button>
+        <div v-if="paid">
+          <h4>Оплачено!</h4>
+          <visitor-info :type="tabData['0'].visitTypeOptions.find(x => x.value === tabData['0'].visitType).text"
+                        :date="tabData['0'].visitDate"
+                        :time="tabData['0'].visitTime"
+                        :tickets-number="ticketsNumber"
+                        :track-number="tabData['1'].trackNumber"/>
+        </div>
+        <div v-else>
+          <h4>Оплата билетов</h4>
+          <b-row no-gutters class="mb-3">
+            <b-col col md="8">
+              <visitor-info :type="tabData['0'].visitTypeOptions.find(x => x.value === tabData['0'].visitType).text"
+                            :date="tabData['0'].visitDate"
+                            :time="tabData['0'].visitTime"
+                            :tickets-number="ticketsNumber"
+                            :track-number="tabData['1'].trackNumber"/>
+            </b-col>
+          </b-row>
+          <urfu-button @click="pay">Оплатить</urfu-button>
+        </div>
       </b-tab>
     </b-tabs>
     <div class="d-sm-flex justify-content-evenly">
@@ -115,6 +127,7 @@ export default {
     return {
       maxTab: 3,
       activeTab: 0,
+      paid: false,
       tabData: {
         0: {
           visitTypeOptions: [
@@ -145,6 +158,14 @@ export default {
         visitors: this.tabData['0'].visitors,
       }
     },
+    ticketsNumber() {
+      let ticketNumber = ''
+      const visitorInfoByType = _.groupBy(this.tabData['2'].infoByVisitors, v => v.ticketType)
+      for (const type in visitorInfoByType) {
+        ticketNumber += `${visitorInfoByType[type].length} ${type}, `
+      }
+      return ticketNumber.slice(0, ticketNumber.length - 2)
+    }
   },
 
   methods: {
@@ -158,6 +179,7 @@ export default {
       }
     },
     async pay() {
+      this.paid = true
       alert('оплачено')
     },
     dateFormatter(value) {

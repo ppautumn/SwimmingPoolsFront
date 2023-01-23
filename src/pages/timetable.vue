@@ -3,6 +3,7 @@
     <h1>Расписание</h1>
     <h4>Свободное плавание</h4>
     <h5>Время сеанса: 45 минут</h5>
+    <h6>В таблице указано количество свободных&nbsp;дорожек. Нажмите на ячейку, чтобы записаться</h6>
     <flexible-table :table-free-model="tableFreeModel" visit-type="freeswim" @content-cell-click="contentCellClick"/>
     <urfu-button to="/book">Записаться</urfu-button>
     <h4>Обучение плаванию (дети 4-6 лет)</h4>
