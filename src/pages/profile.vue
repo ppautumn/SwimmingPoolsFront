@@ -4,7 +4,7 @@
     <b-row no-gutters>
       <b-col col lg="8" xl="7" xxl="6">
         <b-card class="card my-5">
-          <div class="d-flex justify-content-between align-items-baseline g-3">
+          <div class="d-block d-sm-flex justify-content-between align-items-baseline g-3">
             <h3 class="mb-4">Персональные данные</h3>
             <urfu-button>Редактировать</urfu-button>
           </div>
@@ -49,30 +49,31 @@
             </b-col>
           </b-row>
         </b-card>
+        <div class="py-4">
+          <h3>Ближайшие сеансы</h3>
+          <swim-slot-view v-for="swimSlot of upcomingSwims" :key="swimSlot.id" :id="swimSlot.id"
+                          :date="swimSlot.date"
+                          :time-slot="swimSlot.time_slot"
+                          :visitors="swimSlot.visitors"
+                          :track="swimSlot.track"
+                          :status="swimSlot.status"
+                          :upcoming="true"
+                          @cancel-click="cancelClick"/>
+        </div>
+        <div class="py-4">
+          <h3>Прошедшие сеансы</h3>
+          <swim-slot-view v-for="swimSlot of pastSwims" :key="swimSlot.id" :id="swimSlot.id"
+                          :date="swimSlot.date"
+                          :time-slot="swimSlot.time_slot"
+                          :visitors="swimSlot.visitors"
+                          :track="swimSlot.track"
+                          :status="swimSlot.status"
+                          :upcoming="false"
+                          @cancel-click="cancelClick"/>
+        </div>
       </b-col>
     </b-row>
-    <div class="py-4">
-      <h3>Ближайшие сеансы</h3>
-      <swim-slot-view v-for="swimSlot of upcomingSwims" :key="swimSlot.id" :id="swimSlot.id"
-                      :date="swimSlot.date"
-                      :time-slot="swimSlot.time_slot"
-                      :visitors="swimSlot.visitors"
-                      :track="swimSlot.track"
-                      :status="swimSlot.status"
-                      :upcoming="true"
-                      @cancel-click="cancelClick"/>
-    </div>
-    <div class="py-4">
-      <h3>Прошедшие сеансы</h3>
-      <swim-slot-view v-for="swimSlot of pastSwims" :key="swimSlot.id" :id="swimSlot.id"
-                      :date="swimSlot.date"
-                      :time-slot="swimSlot.time_slot"
-                      :visitors="swimSlot.visitors"
-                      :track="swimSlot.track"
-                      :status="swimSlot.status"
-                      :upcoming="false"
-                      @cancel-click="cancelClick"/>
-    </div>
+
   </div>
 </template>
 
