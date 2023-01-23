@@ -1,33 +1,56 @@
 <template>
   <div>
     <h1>Профиль</h1>
-    <b-card class="card my-5">
-      <div class="d-flex justify-content-between align-items-baseline g-3">
-        <h3 class="mb-4">Персональные данные</h3>
-        <urfu-button>Редактировать</urfu-button>
-      </div>
-      <div class="d-flex justify-content-between align-items-baseline g-3">
-        <p>user id</p><h6>{{ user.id }}</h6>
-      </div>
-      <div class="d-flex justify-content-between align-items-baseline g-3">
-        <p>Фамилия</p><h6>{{ user.id }}</h6>
-      </div>
-      <div class="d-flex justify-content-between align-items-baseline g-3">
-        <p>Имя</p><h6>{{ user.id }}</h6>
-      </div>
-      <div class="d-flex justify-content-between align-items-baseline g-3">
-        <p>Отчество</p><h6>{{ user.id }}</h6>
-      </div>
-      <div class="d-flex justify-content-between align-items-baseline g-3">
-        <p>Дата рождения</p><h6>{{ user.id }}</h6>
-      </div>
-      <div class="d-flex justify-content-between align-items-baseline g-3">
-        <p>Телефон</p><h6>{{ user.id }}</h6>
-      </div>
-      <div class="d-flex justify-content-between align-items-baseline g-3">
-        <p>Эл. почта</p><h6>{{ user.id }}</h6>
-      </div>
-    </b-card>
+    <b-row no-gutters>
+      <b-col col lg="8" xl="7" xxl="6">
+        <b-card class="card my-5">
+          <div class="d-flex justify-content-between align-items-baseline g-3">
+            <h3 class="mb-4">Персональные данные</h3>
+            <urfu-button>Редактировать</urfu-button>
+          </div>
+          <b-row no-gutters>
+            <b-col col sm="4">
+              <p>user id</p>
+            </b-col>
+            <b-col>
+              <h6>{{ user.id }}</h6>
+            </b-col>
+          </b-row>
+          <b-row no-gutters>
+            <b-col col sm="4">
+              <p>Фамилия</p>
+            </b-col>
+            <b-col>
+              <h6>{{ profile.lastname }}</h6>
+            </b-col>
+          </b-row>
+          <b-row no-gutters>
+            <b-col col sm="4">
+              <p>Имя</p>
+            </b-col>
+            <b-col>
+              <h6>{{ profile.firstname }}</h6>
+            </b-col>
+          </b-row>
+          <b-row no-gutters>
+            <b-col col sm="4">
+              <p>Дата регистрации</p>
+            </b-col>
+            <b-col>
+              <h6>{{ humanReadableDate(new Date(profile.date_joined)) }}</h6>
+            </b-col>
+          </b-row>
+          <b-row no-gutters>
+            <b-col col sm="4">
+              <p>Эл. почта</p>
+            </b-col>
+            <b-col>
+              <h6>{{ profile.email }}</h6>
+            </b-col>
+          </b-row>
+        </b-card>
+      </b-col>
+    </b-row>
     <div class="py-4">
       <h3>Ближайшие сеансы</h3>
       <swim-slot-view v-for="swimSlot of upcomingSwims" :key="swimSlot.id" :id="swimSlot.id"
@@ -58,6 +81,7 @@ import {BForm} from 'bootstrap-vue-3'
 import SwimSlotView from '@/components/swim-slot-view.vue'
 import {getDateOnly} from '@/date-utils'
 import UrfuButton from '@/components/urfu-button.vue'
+import {humanReadableDate} from '@/date-utils'
 
 export default {
   name: "profile",
@@ -74,16 +98,34 @@ export default {
        *   time_slot: string,
        *   visitors: number,
        *   user: number,
-       *   track: number
+       *   track: number,
        * }[] }
        */
       mySlots: [],
-
+      /**
+       * @type { {
+       *   email: string,
+       *   firstname: string,
+       *   lastname: string,
+       *   date_joined: string,
+       * } }
+       */
+      profile: {},
     }
   },
   methods: {
+    humanReadableDate(date) {
+      return humanReadableDate(date)
+    },
     getMyTimetable() {
       return this.axios.get('timetable/')
+    },
+    getProfile() {
+      return this.axios.get('auth/profile/')
+    },
+    async assignProfile() {
+      const profile = await this.getProfile()
+      this.profile = profile.data
     },
     async assignMyTimetable() {
       const mySlotsResponse = await this.getMyTimetable()
@@ -110,6 +152,7 @@ export default {
     },
   },
   async mounted() {
+    await this.assignProfile()
     await this.assignMyTimetable()
   },
 }
