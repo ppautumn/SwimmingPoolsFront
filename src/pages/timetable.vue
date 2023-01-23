@@ -4,15 +4,15 @@
     <h4>Свободное плавание</h4>
     <h5>Время сеанса: 45 минут</h5>
     <h6>В таблице указано количество свободных&nbsp;дорожек. Нажмите на ячейку, чтобы записаться</h6>
-    <flexible-table :table-free-model="tableFreeModel" visit-type="freeswim" @content-cell-click="contentCellClick"/>
+    <flexible-table :table-model="tableFreeModel" visit-type="freeswim" @content-cell-click="contentCellClick"/>
     <urfu-button to="/book">Записаться</urfu-button>
     <h4>Обучение плаванию (дети 4-6 лет)</h4>
     <h5>Время сеанса: 45 минут</h5>
-    <flexible-table :table-free-model="tableFreeModel" visit-type="training"/>
+    <flexible-table :table-model="tableFreeModel" visit-type="training"/>
     <urfu-button to="/book">Записаться</urfu-button>
     <h4>Обучение плаванию (дети 7-13 лет)</h4>
     <h5>Время сеанса: 45 минут</h5>
-    <flexible-table :table-free-model="tableFreeModel" visit-type="training"/>
+    <flexible-table :table-model="tableFreeModel" visit-type="training"/>
     <urfu-button to="/book">Записаться</urfu-button>
     <h6>Посетителям бассейна при себе необходимо иметь справку от врача (терапевт/ педиатр) и плавательную
       шапочку.</h6>
@@ -23,7 +23,7 @@
 <script>
 import {formatDate} from '@/date-utils'
 import UrfuButton from '@/components/urfu-button.vue'
-import FlexibleTable from '@/pages/flexible-table.vue'
+import FlexibleTable from '@/components/flexible-table.vue'
 
 export default {
   name: "timetable",

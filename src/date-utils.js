@@ -3,9 +3,8 @@
  * @param {string} tzString
  * @returns {Date}
  */
-const convertTZ = (date, tzString) => {
-    return new Date(date.toLocaleString("en-US", {timeZone: tzString}))
-}
+const convertTZ = (date, tzString) =>
+    new Date(date.toLocaleString("en-US", {timeZone: tzString}))
 
 export const formatDate = date => {
     const yektDate = convertTZ(date, 'Asia/Yekaterinburg')
@@ -17,7 +16,7 @@ export const formatDate = date => {
  * @param {Date} date
  * @returns {Date}
  */
-export const getDateOnly = (date) => {
+export const getDateOnly = date => {
     const dateOnly = new Date(date)
     dateOnly.setHours(0,0,0,0)
     return date
@@ -28,10 +27,29 @@ export const getDateOnly = (date) => {
  * @param {Date} date
  * @returns {string}
  */
-export const humanReadableDate = (date) => {
-    return date.toLocaleString('ru', {
+export const humanReadableDate = date =>
+    date.toLocaleString('ru', {
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
-    });
+        day: 'numeric',
+    })
+
+/**
+ *
+ * @param {Date} date
+ * @returns {{month: string, day: string, weekday: string}}
+ */
+export const threeBlocksDate = date => {
+    const localeString = date.toLocaleString('ru', {
+        month: 'long',
+        day: 'numeric',
+        weekday: 'short'
+    })
+    const localeSplit = localeString.split(' ')
+    localeSplit[0] = localeSplit[0][0] + localeSplit[0][1]
+    return {
+        month: localeSplit[2],
+        day: localeSplit[1],
+        weekday: localeSplit[0],
+    }
 }

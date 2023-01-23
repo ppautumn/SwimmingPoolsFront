@@ -1,15 +1,19 @@
 <template>
-  <article>
+  <article class="mb-3">
     <header>
       <div :class="{'cell-row': true, 'header': true}">
-        <div v-for="cell of tableFreeModel.tableHeader" class="cell header">
+        <div v-for="cell of tableModel.tableHeader" class="cell header">
           <div v-if="!cell"/>
-          <div v-else>{{ humanReadableDate(cell) }}</div>
+          <div v-else>
+            <div>{{ threeBlocksDate(cell).day }}</div>
+            <div>{{ threeBlocksDate(cell).month }}</div>
+            <div>{{ threeBlocksDate(cell).weekday }}</div>
+          </div>
         </div>
       </div>
     </header>
     <main class="mb-3">
-      <div v-for="row of tableFreeModel.tableRows" :class="{'cell-row': true, 'alt-back': getAltBackgroundByIndex(row.rowNum)}">
+      <div v-for="row of tableModel.tableRows" :class="{'cell-row': true, 'alt-back': getAltBackgroundByIndex(row.rowNum)}">
         <div :class="{cell: true, time: true}">
           {{ row.time }}
         </div>
@@ -25,7 +29,7 @@
 
 <script>
 
-import {humanReadableDate} from '@/date-utils'
+import {threeBlocksDate} from '@/date-utils'
 
 export default {
   name: 'flexible-table',
@@ -40,13 +44,13 @@ export default {
      *   }[]
      * }}
      */
-    tableFreeModel: {},
+    tableModel: {},
     visitType: '',
   },
   emits: ['content-cell-click'],
   methods: {
-    humanReadableDate(date) {
-      return humanReadableDate(new Date(date))
+    threeBlocksDate(date) {
+      return threeBlocksDate(new Date(date))
     },
     getAltBackgroundByIndex(index) {
       return index % 2 !== 0
@@ -60,13 +64,13 @@ export default {
 article {
   box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
   border-radius: .5em;
-  /*overflow-x: scroll;*/
-  overflow-y: clip;
+  overflow-x: auto;
 }
 
 header, main {
   display: flex;
   flex-direction: column;
+  min-width: min-content;
 }
 
 .cell-row {
@@ -88,7 +92,9 @@ header, main {
   justify-content: center;
   align-items: center;
   flex-grow: 1;
-  flex-basis: 1em;
+  flex-shrink: 0;
+  flex-basis: 5em;
+  min-width: 5em;
   cursor: pointer;
 }
 
@@ -103,8 +109,9 @@ header, main {
 }
 
 .cell.header {
-  height: 3em;
+  height: 5em;
   cursor: default;
+  text-align: center;
   /*border-left: 1px solid rgba(27, 27, 27, 0.7);*/
 }
 
