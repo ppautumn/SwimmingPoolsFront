@@ -23,7 +23,7 @@
 <script>
 import {formatDate} from '@/date-utils'
 import UrfuButton from '@/components/urfu-button.vue'
-import FlexibleTable from '@/components/flexible-table.vue'
+import FlexibleTable from '@/components/timetable/flexible-table.vue'
 
 export default {
   name: "timetable",

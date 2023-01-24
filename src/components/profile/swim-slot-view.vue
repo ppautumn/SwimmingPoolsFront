@@ -3,6 +3,7 @@
     <h5>{{ humanReadableDate() }} {{ timeSlot }}</h5>
     <b-card :class="{'card': true, 'upcoming': upcoming}">
       <h5 class="">Свободное плавание</h5>
+      <status-text :status="status"/>
       <div class="d-flex justify-content-between align-items-baseline">
         <p>Иванов Ванька Встанька</p>
         <div class="d-flex info-right">
@@ -23,9 +24,11 @@
 </template>
 <script>
 import {humanReadableDate} from '@/date-utils'
+import StatusText from '@/components/profile/status-text.vue'
 
 export default {
   name: 'swim-slot-view',
+  components: {StatusText},
   emits: ['cancel-click'],
   props: {
     id: Number,
@@ -33,7 +36,10 @@ export default {
     timeSlot: String,
     visitors: Number,
     track: Number,
-    status: String,
+    /**
+     * @type SlotStatus
+     */
+    status: '',
     upcoming: true,
   },
   data() {
@@ -49,6 +55,7 @@ export default {
       const delResult = await this.axios.delete(`timetable/${this.id}/`)
       const delData = delResult.data
       alert(delData)
+      this.$emit('cancel-click')
     },
     async moreClick() {
       if (this.detailsData) {
@@ -58,7 +65,7 @@ export default {
         this.detailsData = detailsResult.data
       }
     },
-  }
+  },
 }
 </script>
 <style scoped>

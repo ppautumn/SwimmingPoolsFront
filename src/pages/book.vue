@@ -1,6 +1,7 @@
 <script setup>
 import _ from 'lodash'
-import VisitorInfo from '@/components/visitor-info.vue'
+import VisitorInfo from '@/components/book/visitor-info.vue'
+import UrfuButton from '@/components/urfu-button.vue'
 </script>
 
 <template>
@@ -109,8 +110,8 @@ import VisitorInfo from '@/components/visitor-info.vue'
 
 <script>
 
-import FormInputHorizontal from '@/components/form-input-horizontal.vue'
-import TrackSelector from '@/components/track-selector.vue'
+import FormInputHorizontal from '@/components/book/form-input-horizontal.vue'
+import TrackSelector from '@/components/book/track-selector.vue'
 import {formatDate} from '@/date-utils'
 
 export default {

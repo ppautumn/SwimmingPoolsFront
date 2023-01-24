@@ -1,14 +1,14 @@
 <template>
   <div>
     <h1>Профиль</h1>
-    <b-row no-gutters>
+    <b-row>
       <b-col col lg="8" xl="7" xxl="6">
         <b-card class="card my-5">
           <div class="d-block d-sm-flex justify-content-between align-items-baseline g-3">
             <h3 class="mb-4">Персональные данные</h3>
             <urfu-button>Редактировать</urfu-button>
           </div>
-          <b-row no-gutters>
+          <b-row>
             <b-col col sm="4">
               <p>user id</p>
             </b-col>
@@ -16,7 +16,7 @@
               <h6>{{ user.id }}</h6>
             </b-col>
           </b-row>
-          <b-row no-gutters>
+          <b-row>
             <b-col col sm="4">
               <p>Фамилия</p>
             </b-col>
@@ -24,7 +24,7 @@
               <h6>{{ profile.lastname }}</h6>
             </b-col>
           </b-row>
-          <b-row no-gutters>
+          <b-row>
             <b-col col sm="4">
               <p>Имя</p>
             </b-col>
@@ -32,7 +32,7 @@
               <h6>{{ profile.firstname }}</h6>
             </b-col>
           </b-row>
-          <b-row no-gutters>
+          <b-row>
             <b-col col sm="4">
               <p>Дата регистрации</p>
             </b-col>
@@ -40,7 +40,7 @@
               <h6>{{ humanReadableDate(new Date(profile.date_joined)) }}</h6>
             </b-col>
           </b-row>
-          <b-row no-gutters>
+          <b-row>
             <b-col col sm="4">
               <p>Эл. почта</p>
             </b-col>
@@ -79,7 +79,7 @@
 
 <script>
 import {BForm} from 'bootstrap-vue-3'
-import SwimSlotView from '@/components/swim-slot-view.vue'
+import SwimSlotView from '@/components/profile/swim-slot-view.vue'
 import {getDateOnly} from '@/date-utils'
 import UrfuButton from '@/components/urfu-button.vue'
 import {humanReadableDate} from '@/date-utils'
@@ -93,6 +93,9 @@ export default {
   data() {
     return {
       /**
+       * @typedef {'awaiting payment' | 'paid' | 'canceled' | ''} SlotStatus
+       */
+      /**
        * @type { {
        *   id: number,
        *   date: string,
@@ -100,6 +103,7 @@ export default {
        *   visitors: number,
        *   user: number,
        *   track: number,
+       *   status: SlotStatus,
        * }[] }
        */
       mySlots: [],
