@@ -4,15 +4,16 @@
     <b-card :class="{'card': true, 'upcoming': upcoming}">
       <h5 class="">Свободное плавание</h5>
       <status-text :status="status"/>
-      <div class="d-flex justify-content-between align-items-baseline">
+      <div class="d-flex justify-content-between align-items-baseline mb-3">
         <p>Иванов Ванька Встанька</p>
-        <div class="d-flex info-right">
-          <p>{{ track }} дорожка</p>
-          <p>{{ visitors }} чел.</p>
+        <div class="d-flex flex-column align-items-end">
+          <p class="mb-1">дорожка: {{ track }}</p>
+          <p class="mb-1">человек: {{ visitors }}</p>
         </div>
       </div>
       <div class="d-flex justify-content-between">
         <b-button variant="outline-primary" @click="moreClick">Подробнее</b-button>
+        <b-button v-if="upcoming && status === 'awaiting payment'" @click="payClick" variant="outline-success">Оплатить</b-button>
         <b-button variant="outline-danger" @click="cancelClick">Отменить</b-button>
       </div>
       <div v-for="[key, detail] of detailsData ? Object.entries(detailsData) : {}">
@@ -29,7 +30,7 @@ import StatusText from '@/components/profile/status-text.vue'
 export default {
   name: 'swim-slot-view',
   components: {StatusText},
-  emits: ['cancel-click'],
+  emits: ['cancel-click', 'pay-click'],
   props: {
     id: Number,
     date: String,
@@ -52,10 +53,11 @@ export default {
       return humanReadableDate(new Date(this.date))
     },
     async cancelClick() {
-      const delResult = await this.axios.delete(`timetable/${this.id}/`)
-      const delData = delResult.data
-      alert(delData)
+      await this.axios.delete(`timetable/${this.id}/`)
       this.$emit('cancel-click')
+    },
+    payClick() {
+      this.$emit('pay-click', this.id)
     },
     async moreClick() {
       if (this.detailsData) {
@@ -72,11 +74,6 @@ export default {
 
 .card.upcoming {
   background: var(--gradient-brand-transparent);
-}
-
-.info-right {
-  gap: 0.5em;
-  margin-right: 0.5em;
 }
 
 </style>

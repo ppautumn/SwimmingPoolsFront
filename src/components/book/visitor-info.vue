@@ -17,8 +17,11 @@
 </template>
 
 <script>
+import FormInputHorizontal from '@/components/book/form-input-horizontal.vue'
+
 export default {
   name: "visitor-info",
+  components: {FormInputHorizontal},
   props: {
     type: '',
     date: '',

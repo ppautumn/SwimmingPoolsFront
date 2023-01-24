@@ -8,6 +8,7 @@ import UrfuButton from '@/components/urfu-button.vue'
   <div>
     <h1>Запись на сеанс</h1>
     <b-tabs v-model="activeTab" fill lazy>
+
       <b-tab title="Выбор даты и времени сеанса" class="py-5">
         <b-row no-gutters>
           <h4>Выберите дату и время сеанса</h4>
@@ -31,6 +32,7 @@ import UrfuButton from '@/components/urfu-button.vue'
           </b-col>
         </b-row>
       </b-tab>
+
       <b-tab title="Выбор дорожки" class="py-5">
         <h4>Выбор дорожки</h4>
         <b-row no-gutters class="mb-3">
@@ -45,6 +47,7 @@ import UrfuButton from '@/components/urfu-button.vue'
         <track-selector v-model="tabData['1'].trackNumber"
                         :new-visitors="tabData['0'].visitors" :time-slot="tabData['0'].visitTime"/>
       </b-tab>
+
       <b-tab title="Информация по посетителям" class="py-5">
         <h4>Информация по посетителям</h4>
         <b-row no-gutters>
@@ -69,6 +72,7 @@ import UrfuButton from '@/components/urfu-button.vue'
           </b-col>
         </b-row>
       </b-tab>
+
       <b-tab title="Оплата билетов" class="py-5">
         <div v-if="paid">
           <h4>Оплачено!</h4>
@@ -77,6 +81,7 @@ import UrfuButton from '@/components/urfu-button.vue'
                         :time="tabData['0'].visitTime"
                         :tickets-number="ticketsNumber"
                         :track-number="tabData['1'].trackNumber"/>
+          <urfu-button to="/profile">Показать запись</urfu-button>
         </div>
         <div v-else>
           <h4>Оплата билетов</h4>
@@ -92,11 +97,11 @@ import UrfuButton from '@/components/urfu-button.vue'
           <urfu-button @click="pay">Оплатить</urfu-button>
         </div>
       </b-tab>
+
     </b-tabs>
     <div class="d-sm-flex justify-content-evenly">
-      <urfu-button v-if="activeTab > 0" @click="activeTab--">Назад</urfu-button>
-      <urfu-button v-if="activeTab < maxTab - 1" @click="activeTab++">Далее</urfu-button>
-      <urfu-button v-if="activeTab === maxTab - 1" @click="submit">Потвердить и оплатить</urfu-button>
+      <urfu-button v-if="activeTab > 0" @click="backButtonClick">{{backButtonText}}</urfu-button>
+      <urfu-button v-if="activeTab < maxTab" @click="nextButtonClick">{{nextButtonText}}</urfu-button>
     </div>
     <br>
     <h3>Информация</h3>
@@ -113,6 +118,7 @@ import UrfuButton from '@/components/urfu-button.vue'
 import FormInputHorizontal from '@/components/book/form-input-horizontal.vue'
 import TrackSelector from '@/components/book/track-selector.vue'
 import {formatDate} from '@/date-utils'
+import {AxiosError} from 'axios'
 
 export default {
   name: "book",
@@ -129,6 +135,7 @@ export default {
       maxTab: 3,
       activeTab: 0,
       paid: false,
+      slotNumber: 0,
       tabData: {
         0: {
           visitTypeOptions: [
@@ -144,9 +151,28 @@ export default {
           trackNumber: 0,
         },
         2: {
+          /**
+           * @type {{visitorName: '', ticketType: ''}[]}
+           */
           infoByVisitors: [],
         },
       },
+      responses: {
+        /**
+         * @type {{
+         *     "id": number,
+         *     "date": string,
+         *     "time_slot": string,
+         *     "status": SlotStatus,
+         *     "visitors": number,
+         *     "user": number,
+         *     "track": number,
+         * }}
+         */
+        bookSlot: {},
+        submitSession: {},
+        pay: {},
+      }
     }
   },
 
@@ -159,6 +185,12 @@ export default {
         visitors: this.tabData['0'].visitors,
       }
     },
+    submitSessionDto() {
+      return {
+        timetable_slot: this.responses.bookSlot.id,
+        visitors: this.tabData['2'].infoByVisitors.filter(visitor => visitor.visitorName && visitor.ticketType).map(visitor => ({name: visitor.visitorName, ticket_type: visitor.ticketType})),
+      }
+    },
     ticketsNumber() {
       let ticketNumber = ''
       const visitorInfoByType = _.groupBy(this.tabData['2'].infoByVisitors, v => v.ticketType)
@@ -166,22 +198,34 @@ export default {
         ticketNumber += `${visitorInfoByType[type].length} ${type}, `
       }
       return ticketNumber.slice(0, ticketNumber.length - 2)
-    }
+    },
+    backButtonText() {
+      return 'Назад'
+    },
+    nextButtonText() {
+      switch (this.activeTab) {
+        case this.maxTab - 1:
+          return 'Подтвердить и оплатить'
+        default:
+          return 'Далее'
+      }
+    },
   },
 
   methods: {
-    async submit() {
-      this.activeTab++
-      try {
-        await this.axios.post('timetable/', this.bookSlotDto)
-      } catch (e) {
-        alert(e)
-        console.error(e)
-      }
+    submitAdditionalVisitors() {
+      return this.axios.post('session/', this.submitSessionDto)
+    },
+    submitSlotBooking() {
+      return this.axios.post('timetable/', this.bookSlotDto)
+    },
+    serverPay() {
+      return this.axios.post(`slot-payment/${this.responses.bookSlot.id}/`)
     },
     async pay() {
       this.paid = true
-      alert('оплачено')
+      const result = await this.serverPay()
+      this.responses.pay = result.data
     },
     dateFormatter(value) {
       // yyyy-mm-dd to our format
@@ -192,6 +236,27 @@ export default {
     timeFormatter(value) {
       return value
     },
+    backButtonClick() {
+      this.activeTab--
+    },
+    async nextButtonClick() {
+      try {
+        if (this.activeTab === 1) {
+          const result = await this.submitSlotBooking()
+          this.responses.bookSlot = result.data
+        }
+        if (this.activeTab === 2) {
+          const result = await this.submitAdditionalVisitors()
+          this.responses.submitSession = result.data
+        }
+        this.activeTab++
+      } catch (e) {
+        if (e instanceof AxiosError && e.response.status === 400) {
+          alert(e.response.data['non_field_errors'][0])
+        }
+        console.error(e)
+      }
+    }
   },
 
   created() {

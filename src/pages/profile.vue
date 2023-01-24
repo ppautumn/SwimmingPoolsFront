@@ -58,7 +58,9 @@
                           :track="swimSlot.track"
                           :status="swimSlot.status"
                           :upcoming="true"
-                          @cancel-click="cancelClick"/>
+                          @cancel-click="cancelClick"
+                          @pay-click="payClick"
+          />
         </div>
         <div class="py-4">
           <h3>Прошедшие сеансы</h3>
@@ -128,6 +130,9 @@ export default {
     getProfile() {
       return this.axios.get('auth/profile/')
     },
+    serverPay(slotId) {
+      return this.axios.post(`slot-payment/${slotId}/`)
+    },
     async assignProfile() {
       const profile = await this.getProfile()
       this.profile = profile.data
@@ -139,6 +144,10 @@ export default {
     async cancelClick() {
       await this.assignMyTimetable()
     },
+    async payClick(slotId) {
+      await this.serverPay(slotId)
+      await this.assignMyTimetable()
+    }
   },
   computed: {
     upcomingSwims() {
