@@ -17,6 +17,7 @@ import SwimSlotView from '@/components/profile/swim-slot-view.vue'
                     :track="responses.lastSlot?.track"
                     :status="responses.lastSlot?.status"
                     class="mb-3"
+                    @cancel-click="cancelPreviousBookingClick"
                     />
     <b-tabs v-model="activeTab" fill lazy>
 
@@ -77,8 +78,8 @@ import SwimSlotView from '@/components/profile/swim-slot-view.vue'
                             type="text"/>
             </form-input-horizontal>
             <form-input-horizontal label="Тип билета" v-slot="{id, placeholder}">
-              <b-form-input v-model="tabData['2'].infoByVisitors[i].ticketType" :id="id" :placeholder="placeholder"
-                            type="text"/>
+              <b-form-select v-model="tabData['2'].infoByVisitors[i].ticketType" :id="id" :placeholder="placeholder"
+                             :options="tabData['2'].ticketTypeOptions"/>
             </form-input-horizontal>
           </b-col>
         </b-row>
@@ -162,8 +163,12 @@ export default {
           trackNumber: 0,
         },
         2: {
+          ticketTypeOptions: [
+            {value: 'Взрослый', text: 'Взрослый'},
+            {value: 'Детский', text: 'Детский'},
+          ],
           /**
-           * @type {{visitorName: '', ticketType: ''}[]}
+           * @type {{visitorName: string, ticketType: 'Взрослый' | 'Детский'}[]}
            */
           infoByVisitors: [],
         },
@@ -225,6 +230,8 @@ export default {
   },
 
   methods: {
+
+    // axioses
     submitAdditionalVisitors() {
       return this.axios.post('session/', this.submitSessionDto)
     },
@@ -237,6 +244,8 @@ export default {
     getLastSlot() {
       return this.axios.get('upcoming-slots/')
     },
+
+    // utils
     async pay() {
       this.paid = true
       const result = await this.serverPay()
@@ -251,6 +260,8 @@ export default {
     timeFormatter(value) {
       return value
     },
+
+    // event handlers
     backButtonClick() {
       this.activeTab--
     },
@@ -271,13 +282,16 @@ export default {
         }
         console.error(e)
       }
+    },
+    cancelPreviousBookingClick() {
+      this.responses.lastSlot = {}
     }
   },
 
   created() {
     this.$watch('tabData.0.additionalVisitors', newValue => {
       for (let i = 0; i < newValue; i++) {
-        this.tabData['2'].infoByVisitors[i] = {visitorName: '', ticketType: ''}
+        this.tabData['2'].infoByVisitors[i] = {visitorName: '', ticketType: 'Взрослый'}
       }
     }, {immediate: true})
   },
