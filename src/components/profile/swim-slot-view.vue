@@ -4,13 +4,12 @@
     <b-card :class="{'card': true, 'upcoming': upcoming}">
       <h5 class="">Свободное плавание</h5>
       <status-text :status="status"/>
-      <div class="d-flex justify-content-between align-items-baseline mb-3">
-        <p>Иванов Ванька Встанька</p>
-        <div class="d-flex flex-column align-items-end">
+      <b-row v-for="a of [1]" class="mb-3">
+        <b-col class="">
           <p class="mb-1">дорожка: {{ track }}</p>
           <p class="mb-1">человек: {{ visitors }}</p>
-        </div>
-      </div>
+        </b-col>
+      </b-row>
       <div class="d-flex justify-content-between">
         <b-button variant="outline-primary" @click="moreClick">Подробнее</b-button>
         <b-button v-if="upcoming && status === 'awaiting payment'" @click="payClick" variant="outline-success">Оплатить</b-button>

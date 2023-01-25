@@ -2,11 +2,22 @@
 import _ from 'lodash'
 import VisitorInfo from '@/components/book/visitor-info.vue'
 import UrfuButton from '@/components/urfu-button.vue'
+import SwimSlotView from '@/components/profile/swim-slot-view.vue'
 </script>
 
 <template>
   <div>
     <h1>Запись на сеанс</h1>
+
+    <h4 v-if="responses.lastSlot.id">У вас есть незавершённое бронирование</h4>
+    <swim-slot-view v-if="responses.lastSlot.id" :id="responses.lastSlot?.id"
+                    :date="responses.lastSlot?.date"
+                    :time-slot="responses.lastSlot?.time_slot"
+                    :visitors="responses.lastSlot?.visitors"
+                    :track="responses.lastSlot?.track"
+                    :status="responses.lastSlot?.status"
+                    class="mb-3"
+                    />
     <b-tabs v-model="activeTab" fill lazy>
 
       <b-tab title="Выбор даты и времени сеанса" class="py-5">
@@ -25,8 +36,8 @@ import UrfuButton from '@/components/urfu-button.vue'
               <b-form-input v-model="tabData['0'].visitTime" :id="id" :placeholder="placeholder"
                             type="time" :formatter="timeFormatter"/>
             </form-input-horizontal>
-            <form-input-horizontal label="кол-во посетителей" v-slot="{id, placeholder}">
-              <b-form-input v-model="tabData['0'].visitors" :id="id" :placeholder="placeholder"
+            <form-input-horizontal label="кол-во дополнительных посетителей" v-slot="{id, placeholder}">
+              <b-form-input v-model="tabData['0'].additionalVisitors" :id="id" :placeholder="placeholder"
                             type="number"/>
             </form-input-horizontal>
           </b-col>
@@ -40,12 +51,12 @@ import UrfuButton from '@/components/urfu-button.vue'
             <visitor-info :type="tabData['0'].visitTypeOptions.find(x => x.value === tabData['0'].visitType).text"
                           :date="tabData['0'].visitDate"
                           :time="tabData['0'].visitTime"
-                          :visitor-number="tabData['0'].visitors"/>
+                          :visitor-number="tabData['0'].additionalVisitors"/>
           </b-col>
         </b-row>
         <h5>Выберите номер дорожки</h5>
         <track-selector v-model="tabData['1'].trackNumber"
-                        :new-visitors="tabData['0'].visitors" :time-slot="tabData['0'].visitTime"/>
+                        :new-visitors="tabData['0'].additionalVisitors" :time-slot="tabData['0'].visitTime"/>
       </b-tab>
 
       <b-tab title="Информация по посетителям" class="py-5">
@@ -55,11 +66,11 @@ import UrfuButton from '@/components/urfu-button.vue'
             <visitor-info :type="tabData['0'].visitTypeOptions.find(x => x.value === tabData['0'].visitType).text"
                           :date="tabData['0'].visitDate"
                           :time="tabData['0'].visitTime"
-                          :visitor-number="tabData['0'].visitors"
+                          :visitor-number="tabData['0'].additionalVisitors"
                           :track-number="tabData['1'].trackNumber"/>
           </b-col>
         </b-row>
-        <b-row no-gutters v-for="i of _.range(tabData['0'].visitors)">
+        <b-row no-gutters v-for="i of _.range(tabData['0'].additionalVisitors)">
           <b-col col md="8">
             <form-input-horizontal label="ФИО посетителя" v-slot="{id, placeholder}">
               <b-form-input v-model="tabData['2'].infoByVisitors[i].visitorName" :id="id" :placeholder="placeholder"
@@ -145,7 +156,7 @@ export default {
           visitType: 'freeswim',
           visitDate: null,
           visitTime: null,
-          visitors: 1,
+          additionalVisitors: 1,
         },
         1: {
           trackNumber: 0,
@@ -172,6 +183,7 @@ export default {
         bookSlot: {},
         submitSession: {},
         pay: {},
+        lastSlot: {},
       }
     }
   },
@@ -182,7 +194,7 @@ export default {
         date: this.tabData['0'].visitDate,
         time_slot: this.tabData['0'].visitTime,
         track: this.tabData['1'].trackNumber,
-        visitors: this.tabData['0'].visitors,
+        visitors: this.tabData['0'].additionalVisitors,
       }
     },
     submitSessionDto() {
@@ -222,6 +234,9 @@ export default {
     serverPay() {
       return this.axios.post(`slot-payment/${this.responses.bookSlot.id}/`)
     },
+    getLastSlot() {
+      return this.axios.get('upcoming-slots/')
+    },
     async pay() {
       this.paid = true
       const result = await this.serverPay()
@@ -260,17 +275,19 @@ export default {
   },
 
   created() {
-    this.$watch('tabData.0.visitors', newValue => {
+    this.$watch('tabData.0.additionalVisitors', newValue => {
       for (let i = 0; i < newValue; i++) {
         this.tabData['2'].infoByVisitors[i] = {visitorName: '', ticketType: ''}
       }
     }, {immediate: true})
   },
 
-  mounted() {
+  async mounted() {
     this.tabData['0'].visitDate = this.date
     this.tabData['0'].visitTime = this.time
     this.tabData['0'].visitType = this.visitType
+    const lastSlotResult = await this.getLastSlot()
+    this.responses.lastSlot = lastSlotResult.data['message'] ? {} : lastSlotResult.data
   },
 
 }
