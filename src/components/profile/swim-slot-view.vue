@@ -3,8 +3,8 @@
     <h5>{{ humanReadableDate() }} {{ timeSlot }}</h5>
     <b-card :class="{'card': true, 'upcoming': upcoming}">
       <h5 class="">Свободное плавание</h5>
-      <status-text :status="status"/>
-      <b-row v-for="a of [1]" class="mb-3">
+      <status-text v-if="upcoming" :status="status"/>
+      <b-row class="mb-3">
         <b-col class="">
           <p class="mb-1">дорожка: {{ track }}</p>
           <p class="mb-1">человек: {{ visitors }}</p>
