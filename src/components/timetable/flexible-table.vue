@@ -18,9 +18,9 @@
           {{ row.time }}
         </div>
         <div v-for="cell of row.availables"
-             :class="{cell: true}"
-             @click="$emit('content-cell-click', cell.date, row.time, $props.visitType)">
-          {{ cell.slots }}
+             :class="{cell: true, disabled: cell.disabled}"
+             @click="cell.disabled ? void 0 : $emit('content-cell-click', cell.date, row.time, $props.visitType)">
+          {{ cell.disabled ? 0 : cell.slots }}
         </div>
       </div>
     </main>
@@ -38,7 +38,7 @@ export default {
      * @type {{
      *   tableHeader: string[],
      *   tableRows: {
-     *     availables: {date: string, slots: number}[],
+     *     availables: {date: string, slots: number, disabled: boolean}[],
      *     rowNum: number,
      *     time: string
      *   }[]
@@ -112,12 +112,21 @@ header, main {
   height: 5em;
   cursor: default;
   text-align: center;
-  /*border-left: 1px solid rgba(27, 27, 27, 0.7);*/
 }
 
 .cell.time {
-  /*background: rgba(221, 10, 123, 0.1);*/
   cursor: default;
+}
+
+.cell.disabled {
+  color: gray;
+}
+
+.cell.disabled:hover, .cell.disabled:focus, .cell.time:hover, .cell.time:focus, .cell.header:hover, .cell.header:focus {
+  cursor: default;
+  background: initial;
+  font-weight: initial;
+  color: initial;
 }
 
 </style>

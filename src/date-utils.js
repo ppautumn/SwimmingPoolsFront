@@ -53,3 +53,16 @@ export const threeBlocksDate = date => {
         weekday: localeSplit[0],
     }
 }
+
+/**
+ *
+ * @param {string} date
+ * @param {string} time
+ * @returns {Date}
+ */
+export const makeDateFromStrings = (date, time) => {
+    const [parsedHour, parsedMinute] = time.split(':').map(t => Number.parseInt(t))
+    const dateOfSlot = new Date(date)
+    dateOfSlot.setHours(parsedHour, parsedMinute)
+    return dateOfSlot
+}

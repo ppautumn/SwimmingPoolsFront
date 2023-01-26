@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import {formatDate} from '@/date-utils'
+import {formatDate, makeDateFromStrings} from '@/date-utils'
 import UrfuButton from '@/components/urfu-button.vue'
 import FlexibleTable from '@/components/timetable/flexible-table.vue'
 
@@ -76,10 +76,14 @@ export default {
         return {
           time,
           rowNum,
-          availables: datesSlotsSplitTable.map((slotsAtDate) => ({
-            slots: slotsAtDate.slots[time],
-            date: slotsAtDate.date,
-          })),
+          availables: datesSlotsSplitTable.map((slotsAtDate) => {
+            const dateOfSlot = makeDateFromStrings(slotsAtDate.date, time)
+            return ({
+              slots: slotsAtDate.slots[time],
+              disabled: dateOfSlot < new Date(),
+              date: slotsAtDate.date,
+            })
+          }),
         }
       })
 
