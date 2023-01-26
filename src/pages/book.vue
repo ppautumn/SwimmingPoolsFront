@@ -39,7 +39,7 @@ import SwimSlotView from '@/components/profile/swim-slot-view.vue'
             </form-input-horizontal>
             <form-input-horizontal label="кол-во дополнительных посетителей" v-slot="{id, placeholder}">
               <b-form-input v-model="tabData['0'].additionalVisitors" :id="id" :placeholder="placeholder"
-                            type="number"/>
+                            type="number" number/>
             </form-input-horizontal>
           </b-col>
         </b-row>
@@ -199,7 +199,7 @@ export default {
         date: this.tabData['0'].visitDate,
         time_slot: this.tabData['0'].visitTime,
         track: this.tabData['1'].trackNumber,
-        visitors: this.tabData['0'].additionalVisitors,
+        visitors: this.tabData['0'].additionalVisitors + 1,
       }
     },
     submitSessionDto() {
