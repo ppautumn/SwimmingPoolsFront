@@ -13,7 +13,7 @@
       <div class="d-flex justify-content-between">
         <b-button variant="outline-primary" @click="moreClick">Подробнее</b-button>
         <b-button v-if="upcoming && status === 'awaiting payment'" @click="payClick" variant="outline-success">Оплатить</b-button>
-        <b-button variant="outline-danger" @click="cancelClick">Отменить</b-button>
+        <b-button v-if="upcoming" variant="outline-danger" @click="cancelClick">Отменить</b-button>
       </div>
       <div v-for="[key, detail] of detailsData ? Object.entries(detailsData) : {}">
         <span>{{key}}</span>

@@ -9,13 +9,14 @@ import SwimSlotView from '@/components/profile/swim-slot-view.vue'
   <div>
     <h1>Запись на сеанс</h1>
 
-    <h4 v-if="responses.lastSlot.id">У вас есть незавершённое бронирование</h4>
-    <swim-slot-view v-if="responses.lastSlot.id" :id="responses.lastSlot?.id"
+    <h4 v-if="shouldShowActiveBooking">У вас есть {{ responses.lastSlot?.status === 'paid' ? 'активное' : 'незавершённое' }} бронирование</h4>
+    <swim-slot-view v-if="shouldShowActiveBooking" :id="responses.lastSlot?.id"
                     :date="responses.lastSlot?.date"
                     :time-slot="responses.lastSlot?.time_slot"
                     :visitors="responses.lastSlot?.visitors"
                     :track="responses.lastSlot?.track"
                     :status="responses.lastSlot?.status"
+                    :upcoming="true"
                     class="mb-3"
                     @cancel-click="cancelPreviousBookingClick"
                     />
@@ -226,6 +227,9 @@ export default {
         default:
           return 'Далее'
       }
+    },
+    shouldShowActiveBooking() {
+      return this.responses.lastSlot.id && this.responses.lastSlot.status !== 'canceled'
     },
   },
 
